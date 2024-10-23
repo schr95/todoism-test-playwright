@@ -1,16 +1,20 @@
-import { Page } from '@playwright/test';
+import { Page,Locator } from '@playwright/test';
 
 export class TaskPage {
     readonly page: Page;
+    readonly taskInput: Locator;
+    readonly clearAllTasks: Locator;
 
     constructor(page: Page) {
         this.page = page;
+        this.taskInput=page.getByPlaceholder('What needs to be done?');
+        this.clearAllTasks=page.getByText('clear_allClear');
     }
 
     async addTask(taskName: string) {
-        await this.page.getByPlaceholder('What needs to be done?').click();
-        await this.page.getByPlaceholder('What needs to be done?').fill(taskName);
-        await this.page.getByPlaceholder('What needs to be done?').press('Enter');
+        await this.taskInput.click();
+        await this.taskInput.fill(taskName);
+        await this.taskInput.press('Enter');
     }
 
     async completeTask(taskName: string) {
@@ -18,7 +22,7 @@ export class TaskPage {
     }
 
     async clearTasks() {
-        await this.page.getByText('clear_allClear').click();
+        await this.clearAllTasks.click();
     }
 
     async verifyTaskVisible(taskName: string) {
